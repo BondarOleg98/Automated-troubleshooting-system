@@ -1,9 +1,8 @@
 import os
 import tkinter
 import function_window as fw
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 from tkinter import *
-import pandas as pd
 
 
 class WelcomeWindow(tkinter.Frame):
@@ -12,22 +11,24 @@ class WelcomeWindow(tkinter.Frame):
         self.icon_img = tkinter.PhotoImage(file="file_icon.gif")
         self.root = root
         self.init_main()
+        self.root.protocol("WM_DELETE_WINDOW", self.exit_system)
 
     def init_main(self):
         self.menu_window()
         self.root.title("Searching app failures")
         self.root.geometry("650x450+300+100")
         self.root.resizable(False, False)
+
         welcome_label = Label(text="Welcome to system", font="Arial 32")
 
         choose_frame = LabelFrame(text="Choose file", height=200, width=200, font="Arial 12")
-        btn = tkinter.Button(choose_frame, command=self.open_dialog, image=self.icon_img)
-        btn.pack()
-        # temp = "E:\\test.csv"
-        # fw.FunctionWindow(self.root, temp)
+        # btn = tkinter.Button(choose_frame, command=self.open_dialog, image=self.icon_img)
+        # btn.pack()
+        temp = "E:\\test.csv"
+        fw.FunctionWindow(self.root, temp)
         welcome_label.pack()
         choose_frame.pack()
-
+        self.root.withdraw()
 
     def open_dialog(self):
         file = filedialog.askopenfilename(
@@ -47,4 +48,5 @@ class WelcomeWindow(tkinter.Frame):
         menu.add_cascade(label="File", menu=file_menu)
 
     def exit_system(self):
-        self.root.destroy()
+        if messagebox.askyesno("Exit", "Do you want to quit the application?"):
+            self.quit()

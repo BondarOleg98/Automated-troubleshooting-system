@@ -8,8 +8,10 @@ class FunctionWindow(tkinter.Toplevel):
     def __init__(self, root, file):
         super().__init__(root)
         self.var = IntVar()
+        self.root = root
         self.init_child()
         self.file = file
+        self.protocol("WM_DELETE_WINDOW", self.exit_window)
 
     def init_child(self):
         self.title("Function window")
@@ -35,8 +37,11 @@ class FunctionWindow(tkinter.Toplevel):
 
         if self.var.get() == 0:
             aw.AnalyzeWindow(self, self.file)
+            self.withdraw()
         elif self.var.get() == 1:
             pw.PredictionWindow(self)
+            self.withdraw()
 
     def exit_window(self):
         self.destroy()
+        self.root.deiconify()

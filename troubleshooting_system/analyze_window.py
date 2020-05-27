@@ -7,8 +7,10 @@ class AnalyzeWindow(tkinter.Toplevel):
     def __init__(self, root, file):
         super().__init__(root)
         self.var = IntVar()
+        self.root = root
         self.file = os.path.splitext(os.path.basename(file))[0]
         self.init_child(self.file)
+        self.protocol("WM_DELETE_WINDOW", self.exit_window)
 
     def init_child(self, file):
         self.title("Analyze window")
@@ -18,7 +20,7 @@ class AnalyzeWindow(tkinter.Toplevel):
         self.focus_set()
         self.var.set(0)
 
-        file_label = Label(self, text="Name file: "+file, font="Arial 18", pady=15)
+        file_label = Label(self, text="Name file: " + file, font="Arial 18", pady=15)
         file_label.pack()
 
         btn_back = tkinter.Button(self, text="Back", command=self.exit_window, anchor=SW, padx=10)
@@ -31,10 +33,10 @@ class AnalyzeWindow(tkinter.Toplevel):
         # analyze.pack()
         # predict.pack()
 
-
     # def choose_function(self):
     #
     #
 
     def exit_window(self):
         self.destroy()
+        self.root.deiconify()

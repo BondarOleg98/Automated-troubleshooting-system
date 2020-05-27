@@ -6,7 +6,9 @@ class PredictionWindow(tkinter.Toplevel):
     def __init__(self, root):
         super().__init__(root)
         self.var = IntVar()
+        self.root = root
         self.init_child()
+        self.protocol("WM_DELETE_WINDOW", self.exit_window)
 
     def init_child(self):
         self.title("Prediction window")
@@ -32,3 +34,4 @@ class PredictionWindow(tkinter.Toplevel):
 
     def exit_window(self):
         self.destroy()
+        self.root.deiconify()
