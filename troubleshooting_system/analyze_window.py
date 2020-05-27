@@ -16,8 +16,6 @@ class AnalyzeWindow(tkinter.Toplevel):
         self.title("Analyze window")
         self.geometry("650x550+300+80")
         self.resizable(False, False)
-        self.grab_set()
-        self.focus_set()
         self.var.set(0)
 
         file_label = Label(self, text="Name file: " + file, font="Arial 18", pady=15)

@@ -17,9 +17,10 @@ class FunctionWindow(tkinter.Toplevel):
         self.title("Function window")
         self.geometry("300x180+300+200")
         self.resizable(False, False)
-        self.grab_set()
-        self.focus_set()
+        # self.grab_set()
+        # self.focus_set()
         self.var.set(0)
+
         function_label = Label(self, text="Choose function", font="Arial 15", pady=15)
         function_label.pack()
 
@@ -34,7 +35,6 @@ class FunctionWindow(tkinter.Toplevel):
         predict.pack()
 
     def choose_function(self):
-
         if self.var.get() == 0:
             aw.AnalyzeWindow(self, self.file)
             self.withdraw()
