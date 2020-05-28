@@ -1,6 +1,8 @@
 import os
 import tkinter
 from tkinter import *
+import pandas as pd
+from pandastable import Table
 
 
 class AnalyzeWindow(tkinter.Toplevel):
@@ -8,8 +10,7 @@ class AnalyzeWindow(tkinter.Toplevel):
         super().__init__(root)
         self.var = IntVar()
         self.root = root
-        self.file = os.path.splitext(os.path.basename(file))[0]
-        self.init_child(self.file)
+        self.init_child(file)
         self.protocol("WM_DELETE_WINDOW", self.exit_window)
 
     def init_child(self, file):
@@ -18,8 +19,19 @@ class AnalyzeWindow(tkinter.Toplevel):
         self.resizable(False, False)
         self.var.set(0)
 
+        frame = tkinter.Frame(self)
+        # frame.pack(fill='both', expand=True)
+        data = pd.read_csv(file)
+        data = data.drop(['ID'], axis=1)
+        # data = data.describe()
+        pt = Table(frame, dataframe=data, height=176)
+        pt.show()
+
+        file = os.path.splitext(os.path.basename(file))[0]
         file_label = Label(self, text="Name file: " + file, font="Arial 18", pady=15)
         file_label.pack()
+
+        frame.pack(fill='both')
 
         btn_back = tkinter.Button(self, text="Back", command=self.exit_window, anchor=SW, padx=10)
         btn_submit = tkinter.Button(self, text="Submit", anchor=SW, padx=10)

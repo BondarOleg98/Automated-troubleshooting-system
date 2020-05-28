@@ -1,15 +1,9 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-from matplotlib import cm
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
-# from sklearn.externals import joblib
 import joblib
 from sklearn.ensemble import RandomForestClassifier
-from sklearn import metrics
 
 pd.options.mode.chained_assignment = None
 
@@ -19,7 +13,8 @@ data = pd.read_csv(FILE_PATH)
 data.Date = data.Date.apply(pd.to_datetime)
 data_describe = data
 
-def replaceValueData(data):
+
+def replace_value_data(data):
     data_inputs = data[
         ['Temperature', 'Humidity', 'Hours Since Previous Failure', 'Date.year', 'Date.month', 'Date.day-of-month',
          'Date.day-of-week']]
@@ -29,12 +24,12 @@ def replaceValueData(data):
 
 
 def prediction(data):
-    changedData = replaceValueData(data)
-    inputs_train, inputs_test, expected_output_train, expected_output_test = train_test_split(changedData[1],
-                                                                                              changedData[0],
+    changed_data = replace_value_data(data)
+    inputs_train, inputs_test, expected_output_train, expected_output_test = train_test_split(changed_data[1],
+                                                                                              changed_data[0],
                                                                                               test_size=0.33,
                                                                                               random_state=42)
-    dataPrediction(inputs_train, inputs_test, expected_output_train, expected_output_test, changedData[1])
+    dataPrediction(inputs_train, inputs_test, expected_output_train, expected_output_test, changed_data[1])
 
 
 def dataPrediction(inputs_train, inputs_test, expected_output_train, expected_output_test, data_inputs):
