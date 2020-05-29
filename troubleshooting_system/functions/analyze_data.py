@@ -40,12 +40,12 @@ class AnalyzeData:
             values.append(value)
         return keys, values
 
-    def build_error_diagram(self, data, failure):
-        failure_count = pd.value_counts(data[failure].values, sort=True)
+    def build_error_diagram(self, data, failure_column):
+        failure_count = pd.value_counts(data[failure_column].values, sort=True)
         failure_count_keys, failure_count_values = self.dictionary_sort(dict(failure_count))
         failures = len(failure_count_keys)
 
-        plt.title(failure + ' ', fontsize=data.PLOT_LABEL_FONT_SIZE)
+        plt.title(failure_column + ' ', fontsize=data.PLOT_LABEL_FONT_SIZE)
         plt.bar(np.arange(failures), failure_count_values, color=self.get_colors(failures))
         plt.xticks(np.arange(failures), failure_count_keys, rotation=0, fontsize=12)
         plt.yticks(fontsize=self.PLOT_LABEL_FONT_SIZE)
@@ -55,12 +55,14 @@ class AnalyzeData:
         print("No: " + str(failure_count['No']) + ' ' + "Yes: " + str(failure_count['Yes']))
         print("Total: " + str(failure_count['No'] + failure_count['Yes']))
 
-    def data_error(self, name_column, data):
+    def data_error(self, name_column, failure_column, data):
         array = []
         count_array = []
         data_set = set()
         for row in data.iterrows():
-            if row[1]['Failure'] == 'Yes':
+            if row[1][failure_column] == 'Yes':
+                array.append(row[1][name_column])
+            if row[1][failure_column] == 1:
                 array.append(row[1][name_column])
         array.sort()
 
@@ -75,8 +77,8 @@ class AnalyzeData:
 
         return count_value, count_array, data_set
 
-    def build_dependency_diagram(self, name_column):
-        diagram_param = self.data_error(name_column)
+    def build_dependency_diagram(self, name_column, failure_column, data):
+        diagram_param = self.data_error(name_column, failure_column, data)
         plt.xlabel(name_column, fontsize=self.PLOT_LABEL_FONT_SIZE)
         plt.ylabel('Count of failures', fontsize=self.PLOT_LABEL_FONT_SIZE)
         plt.bar(np.arange(diagram_param[0]), diagram_param[1], color=self.get_colors(diagram_param[0]))
@@ -89,22 +91,14 @@ class AnalyzeData:
         plt.plot(diagram_param[2], diagram_param[1])
         plt.show()
 
-    def build_histogram(self, data):
+    def build_histogram(self, data, name_column):
         plt.figure(figsize=(9, 8))
-        sns.distplot(data['Temperature'], color='g', bins=100, hist_kws={'alpha': 0.4})
+        sns.distplot(data[name_column], color='g', bins=100, hist_kws={'alpha': 0.4})
         plt.figure(figsize=(9, 8))
-        sns.distplot(data['Humidity'], color='g', bins=100, hist_kws={'alpha': 0.4})
+        sns.distplot(data[name_column], color='g', bins=100, hist_kws={'alpha': 0.4})
 
-    def build_boxplot(self, data):
-        sns.boxplot(x=data['Measure1'])
-        sns.boxplot(x=data['Measure2'])
-        sns.boxplot(x=data['Measure3'])
-        data['Humidity'][data['Humidity'] < 70] = 70
-        data['Humidity'][data['Humidity'] > 95] = 95
-        sns.boxplot(x=data['Humidity'])
-        data['Temperature'][data['Temperature'] < 60] = 60
-        data['Temperature'][data['Temperature'] > 71.875] = 71.875
-        sns.boxplot(x=data['Temperature'])
+    def build_boxplot(self, data, name_column):
+        sns.boxplot(x=data[name_column])
 
     def find_value_error(self, column1, column2, data):
         array_param_first = []

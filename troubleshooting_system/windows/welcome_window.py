@@ -23,13 +23,13 @@ class WelcomeWindow(tkinter.Frame):
         welcome_label = Label(text="Welcome to system", font="Arial 32")
 
         choose_frame = LabelFrame(text="Choose file", height=200, width=200, font="Arial 12")
-        btn = tkinter.Button(choose_frame, command=self.open_dialog, image=self.icon)
-        btn.pack()
-        # temp = "E:\\test.csv"
-        # fw.FunctionWindow(self.root, temp)
+        # btn = tkinter.Button(choose_frame, command=self.open_dialog, image=self.icon)
+        # btn.pack()
+        temp = "E:\\test.csv"
+        fw.FunctionWindow(self.root, temp)
         welcome_label.pack()
         choose_frame.pack()
-        # self.root.withdraw()
+        self.root.withdraw()
 
     def open_dialog(self):
         file = filedialog.askopenfilename(

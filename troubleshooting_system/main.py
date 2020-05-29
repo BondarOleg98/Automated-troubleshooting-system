@@ -1,5 +1,4 @@
 import troubleshooting_system.windows.welcome_window as ww
-# from windows import *
 from tkinter import *
 from PIL import ImageTk, Image
 
