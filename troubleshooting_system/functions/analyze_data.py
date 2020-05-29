@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
 pd.options.mode.chained_assignment = None
 
 
@@ -9,12 +11,12 @@ class AnalyzeData:
     def __init__(self):
         self.PLOT_LABEL_FONT_SIZE = 14
 
-    def read_file(file):
-        data = pd.read_csv(file)
+    def read_file(self):
+        data = pd.read_csv(self)
         return data
 
-    def find_statistics_param(file):
-        data = pd.read_csv(file)
+    def find_statistics_param(self):
+        data = pd.read_csv(self)
         try:
             data.Date = data.Date.apply(pd.to_datetime)
             data = data.drop(['ID'], axis=1)
@@ -100,19 +102,19 @@ class AnalyzeData:
     def build_boxplot(self, data, name_column):
         sns.boxplot(x=data[name_column])
 
-    def find_value_error(self, column1, column2, data):
-        array_param_first = []
-        array_param_second = []
-
-        for row in data.iterrows():
-            if row[1]['Failure'] == 'Yes':
-                array_param_first.append(row[1][column1])
-                array_param_second.append(row[1][column2])
-
-        new_data = {column1: array_param_first, column2: array_param_second}
-        df = pd.DataFrame(new_data, columns=[column1, column2])
-        print('#########################################')
-        print(df.mode())
+    # def find_value_error(self, column1, column2, data):
+    #     array_param_first = []
+    #     array_param_second = []
+    #
+    #     for row in data.iterrows():
+    #         if row[1]['Failure'] == 'Yes':
+    #             array_param_first.append(row[1][column1])
+    #             array_param_second.append(row[1][column2])
+    #
+    #     new_data = {column1: array_param_first, column2: array_param_second}
+    #     df = pd.DataFrame(new_data, columns=[column1, column2])
+    #     print('#########################################')
+    #     print(df.mode())
 
     # data.info()
     # print('##############################################################')
