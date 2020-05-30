@@ -127,26 +127,3 @@ def build_error_diagram(data, failure_column):
     plt.ylabel('Count of failures', fontsize=14)
     plt.show()
 
-    # print("No: " + str(failure_count['No']) + ' ' + "Yes: " + str(failure_count['Yes']))
-    # print("Total: " + str(failure_count['No'] + failure_count['Yes']))
-
-    # def find_value_error(self, column1, column2, data):
-    #     array_param_first = []
-    #     array_param_second = []
-    #
-    #     for row in data.iterrows():
-    #         if row[1]['Failure'] == 'Yes':
-    #             array_param_first.append(row[1][column1])
-    #             array_param_second.append(row[1][column2])
-    #
-    #     new_data = {column1: array_param_first, column2: array_param_second}
-    #     df = pd.DataFrame(new_data, columns=[column1, column2])
-    #     print('#########################################')
-    #     print(df.mode())
-
-    # data.info()
-    # print('##############################################################')
-    # print("NaN values:")
-    # data.isnull().values.any()
-    #
-    # data.head(7905)
