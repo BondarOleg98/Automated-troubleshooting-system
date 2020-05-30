@@ -2,9 +2,84 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 pd.options.mode.chained_assignment = None
+
+PLOT_LABEL_FONT_SIZE = 14
+
+
+def read_file(file):
+    data = pd.read_csv(file)
+    return data
+
+
+def find_statistics_param(file):
+    data = pd.read_csv(file)
+    try:
+        data.Date = data.Date.apply(pd.to_datetime)
+        data = data.drop(['ID'], axis=1)
+    except AttributeError:
+        return data.describe()
+    except KeyError:
+        return data.describe()
+    return data.describe()
+
+
+def data_error(name_column, failure_column, data):
+    array = []
+    count_array = []
+    data_set = set()
+    for row in data.iterrows():
+        if row[1][failure_column] == 'Yes':
+            array.append(row[1][name_column])
+        if row[1][failure_column] == 1:
+            array.append(row[1][name_column])
+    array.sort()
+
+    for element in array:
+        data_set.add(element)
+    data_set = sorted(data_set, key=None, reverse=False)
+
+    for element_set in data_set:
+        count_value = array.count(element_set)
+        count_array.append(count_value)
+    count_value = len(count_array)
+
+    return count_value, count_array, data_set
+
+
+def build_dependency_diagram(name_column, failure_column, data):
+    plt.close("Dependecy diagram")
+    diagram_param = data_error(name_column, failure_column, data)
+    plt.figure("Dependecy diagram")
+    plt.xlabel(name_column, fontsize=PLOT_LABEL_FONT_SIZE)
+    plt.ylabel('Count of failures', fontsize=PLOT_LABEL_FONT_SIZE)
+    plt.bar(np.arange(diagram_param[0]), diagram_param[1], color=get_colors(diagram_param[0]))
+    plt.xticks(np.arange(diagram_param[0]), diagram_param[2], rotation=0, fontsize=12)
+    plt.yticks(fontsize=PLOT_LABEL_FONT_SIZE)
+    name_column = name_column.lower()
+    plt.title('Dependency between failure and ' + name_column, fontsize=PLOT_LABEL_FONT_SIZE)
+    plt.figure("Dependecy diagram (line)")
+    plt.plot(diagram_param[2], diagram_param[1])
+    plt.show()
+
+
+def build_pivot_chart(name_column, failure_column, data, id_col):
+    plt.figure("Error chart")
+    data.pivot_table(id_col, name_column, failure_column, 'count').plot(kind='bar', stacked=True)
+
+
+def build_histogram(data, name_column):
+    plt.figure("Histogram")
+    sns.distplot(data[name_column], color='g', bins=100, hist_kws={'alpha': 0.4})
+
+    plt.show()
+
+
+def build_boxplot(data, name_column):
+    plt.figure("Box plot")
+    sns.boxplot(x=data[name_column])
+    plt.show()
 
 
 def get_colors(count):
@@ -31,84 +106,15 @@ def build_error_diagram(data, failure_column):
     failures = len(failure_count_keys)
 
     plt.figure("Error chart")
-    plt.title(failure_column + ' ', fontsize=14)
+    plt.title(failure_column + ' ', fontsize=PLOT_LABEL_FONT_SIZE)
     plt.bar(np.arange(failures), failure_count_values)
     plt.xticks(np.arange(failures), failure_count_keys, rotation=0, fontsize=12)
-    plt.yticks(fontsize=14)
+    plt.yticks(fontsize=PLOT_LABEL_FONT_SIZE)
     plt.ylabel('Count of failures', fontsize=14)
     plt.show()
-    # plt.close()
 
-    # return plt.show()
-
-class AnalyzeData:
-    def __init__(self):
-        self.PLOT_LABEL_FONT_SIZE = 14
-
-    def read_file(self):
-        data = pd.read_csv(self)
-        return data
-
-    def find_statistics_param(self):
-        data = pd.read_csv(self)
-        try:
-            data.Date = data.Date.apply(pd.to_datetime)
-            data = data.drop(['ID'], axis=1)
-        except AttributeError:
-            return data.describe()
-        except KeyError:
-            return data.describe()
-        return data.describe()
-
-
-
-        print("No: " + str(failure_count['No']) + ' ' + "Yes: " + str(failure_count['Yes']))
-        print("Total: " + str(failure_count['No'] + failure_count['Yes']))
-
-    def data_error(self, name_column, failure_column, data):
-        array = []
-        count_array = []
-        data_set = set()
-        for row in data.iterrows():
-            if row[1][failure_column] == 'Yes':
-                array.append(row[1][name_column])
-            if row[1][failure_column] == 1:
-                array.append(row[1][name_column])
-        array.sort()
-
-        for element in array:
-            data_set.add(element)
-        data_set = sorted(data_set, key=None, reverse=False)
-
-        for element_set in data_set:
-            count_value = array.count(element_set)
-            count_array.append(count_value)
-        count_value = len(count_array)
-
-        return count_value, count_array, data_set
-
-    def build_dependency_diagram(self, name_column, failure_column, data):
-        diagram_param = self.data_error(name_column, failure_column, data)
-        plt.xlabel(name_column, fontsize=self.PLOT_LABEL_FONT_SIZE)
-        plt.ylabel('Count of failures', fontsize=self.PLOT_LABEL_FONT_SIZE)
-        plt.bar(np.arange(diagram_param[0]), diagram_param[1], color=self.get_colors(diagram_param[0]))
-        plt.xticks(np.arange(diagram_param[0]), diagram_param[2], rotation=0, fontsize=12)
-        plt.yticks(fontsize=self.PLOT_LABEL_FONT_SIZE)
-        name_column = name_column.lower()
-        plt.title('Dependency between failure and ' + name_column, fontsize=self.PLOT_LABEL_FONT_SIZE)
-        plt.show()
-
-        plt.plot(diagram_param[2], diagram_param[1])
-        plt.show()
-
-    def build_histogram(self, data, name_column):
-        plt.figure(figsize=(9, 8))
-        sns.distplot(data[name_column], color='g', bins=100, hist_kws={'alpha': 0.4})
-        plt.figure(figsize=(9, 8))
-        sns.distplot(data[name_column], color='g', bins=100, hist_kws={'alpha': 0.4})
-
-    def build_boxplot(self, data, name_column):
-        sns.boxplot(x=data[name_column])
+    # print("No: " + str(failure_count['No']) + ' ' + "Yes: " + str(failure_count['Yes']))
+    # print("Total: " + str(failure_count['No'] + failure_count['Yes']))
 
     # def find_value_error(self, column1, column2, data):
     #     array_param_first = []

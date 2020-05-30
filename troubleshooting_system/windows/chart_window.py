@@ -1,17 +1,33 @@
 import troubleshooting_system.functions.analyze_data as ad
 
 
-class ChartWindow():
-    def __init__(self, param_col_entry, param_fail_entry, param):
-        self.param_col_entry = param_col_entry
-        self.param_fail_entry = param_fail_entry
-        self.param = param
-        self.init_chart_window()
+def build_chart(param_col, param_fail, param_id, param, file):
+    if param == 5:
+        try:
+            ad.build_pivot_chart(param_col, param_fail, ad.read_file(file), param_id)
+        except KeyError:
+            return False
+    if param == 1:
+        try:
+            ad.build_error_diagram(ad.read_file(file), param_fail)
+        except KeyError:
+            return False
+    if param == 2:
+        try:
+            ad.build_dependency_diagram(param_col, param_fail, ad.read_file(file))
+        except KeyError:
+            return False
+    if param == 3:
+        try:
+            ad.build_histogram(ad.read_file(file), param_col)
+        except KeyError:
+            return False
+    if param == 4:
+        try:
+            ad.build_boxplot(ad.read_file(file), param_col)
+        except KeyError:
+            return False
+    return True
 
-    def init_chart_window(self):
-        print(self.param)
-        if self.param == 1:
-            ad.build_error_diagram(ad.AnalyzeData.read_file(
-                'E:\\Project\\Automated-troubleshooting-system\\'
-                'troubleshooting_system\\functions\\test.csv'), self.param_fail_entry)
+
 
