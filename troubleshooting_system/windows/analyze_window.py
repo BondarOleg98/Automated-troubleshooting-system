@@ -3,7 +3,7 @@ import tkinter
 import troubleshooting_system.functions.analyze_data as ad
 from tkinter import *
 from pandastable import Table
-import troubleshooting_system.windows.param_analyze_window as paw
+import troubleshooting_system.windows.chart_window as cw
 
 
 class AnalyzeWindow(tkinter.Toplevel):
@@ -11,46 +11,83 @@ class AnalyzeWindow(tkinter.Toplevel):
         super().__init__(root)
         self.root = root
         self.param = IntVar()
+        self.flag_col = StringVar()
+        self.flag_col.set(DISABLED)
+        self.flag_fail = StringVar()
+        self.flag_fail.set(DISABLED)
+        self.flag_btn = StringVar()
+        self.flag_btn.set(DISABLED)
+        self.col_name = StringVar()
+        self.fail_col_name = StringVar()
         self.init_analyze_window(file)
+        self.param_col_entry = Entry(self, textvariable=self.col_name, state=self.flag_col.get())
+        self.param_fail_entry = Entry(self, textvariable=self.fail_col_name, state=self.flag_fail.get())
+        self.btn_submit = tkinter.Button(self, text="Submit", anchor=SW, padx=10, command=self.open_window_chart
+                                         ,state=self.flag_btn.get())
+        self.btn_submit.place(x=500, y=520)
+        self.param_col_entry.grid(row=3, column=0, sticky=W, padx=442)
+        self.param_fail_entry.grid(row=4, column=0, sticky=W, padx=442)
+
+        Label(self, text="Column name:").grid(row=3, column=0, sticky=W, padx=340)
+        Label(self, text="Failure column name:").grid(row=4, column=0, sticky=W, padx=302)
         self.protocol("WM_DELETE_WINDOW", self.exit_window)
 
     def init_analyze_window(self, file):
+        # self.flag.set(NORMAL)
         self.title("Analyze window")
-        self.geometry("650x550+300+80")
-        self.resizable(False, False)
+        self.geometry("570x550+300+80")
+        # self.resizable(False, False)
         self.param.set(0)
 
         frame = tkinter.Frame(self)
-        # frame.pack(fill='both', expand=True)
         pt = Table(frame, dataframe=ad.AnalyzeData.find_statistics_param(file), height=176)
         pt.show()
 
         file = os.path.splitext(os.path.basename(file))[0]
-        file_label = Label(self, text="Name file: " + file, font="Arial 18", pady=15)
-        file_label.pack()
+        file_label = Label(self, text="Name file: " + file, font="Arial 18", pady=15, padx=220)
+        file_label.grid(row=0, column=0, sticky=W)
 
-        frame.pack(fill='both')
+        # frame.grid(fill='both')
+        frame.grid(row=1, column=0, sticky=W)
 
         btn_back = tkinter.Button(self, text="Back", command=self.exit_window, anchor=SW, padx=10)
-        btn_submit = tkinter.Button(self, text="Submit", anchor=SW, padx=10, command=self.choose_chart)
-        btn_submit.place(x=580, y=520)
         btn_back.place(x=3, y=520)
 
-        file_label = Label(self, text="Choose diagram(chart)", font="Arial 12", pady=15)
-        file_label.pack()
+        chart_label = Label(self, text="Choose diagram(chart):", font="Arial 12", pady=15)
+        chart_label.grid(row=2, column=0, sticky=W)
 
-        err_diagram = Radiobutton(self, text="Error diagram", variable=self.param, value=1)
-        depend_diagram = Radiobutton(self, text="Dependency diagram", variable=self.param, value=2)
-        histogram = Radiobutton(self, text="Histogram", variable=self.param, value=3)
-        boxplot = Radiobutton(self, text="Boxplot", variable=self.param, value=4)
+        param_label = Label(self, text="Enter parameters:", font="Arial 12", pady=15)
+        param_label.grid(row=2, column=0, sticky=W, padx=430)
 
-        err_diagram.pack()
-        depend_diagram.pack()
-        histogram.pack()
-        boxplot.pack()
+        err_diagram = Radiobutton(self, text="Error diagram", variable=self.param, value=1, command=self.choose_chart)
+        depend_diagram = Radiobutton(self, text="Dependency diagram", variable=self.param,
+                                     value=2, command=self.choose_chart)
+        histogram = Radiobutton(self, text="Histogram", variable=self.param, value=3, command=self.choose_chart)
+        box_plot = Radiobutton(self, text="Box plot", variable=self.param, value=4, command=self.choose_chart)
+
+        err_diagram.grid(row=3, column=0, sticky=W)
+        depend_diagram.grid(row=4, column=0, sticky=W)
+        histogram.grid(row=5, column=0, sticky=W)
+        box_plot.grid(row=6, column=0, sticky=W)
 
     def choose_chart(self):
-        paw.ParamAnalyzeWindow(self, self.param.get())
+        if self.param.get() > 2:
+            self.flag_fail.set(NORMAL)
+            self.param_fail_entry['state'] = self.flag_fail.get()
+            self.flag_col.set(NORMAL)
+            self.param_col_entry['state'] = self.flag_col.get()
+            self.btn_submit['state'] = NORMAL
+        else:
+            self.flag_fail.set(NORMAL)
+            self.param_fail_entry['state'] = self.flag_fail.get()
+            self.flag_col.set(DISABLED)
+            self.param_col_entry['state'] = self.flag_col.get()
+            self.btn_submit['state'] = NORMAL
+
+        # paw.ParamAnalyzeWindow(self, self.param.get())
+
+    def open_window_chart(self):
+        cw.ChartWindow(self.param_col_entry.get(), self.param_fail_entry.get(), self.param.get())
 
     def exit_window(self):
         self.destroy()

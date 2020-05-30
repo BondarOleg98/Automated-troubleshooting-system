@@ -7,6 +7,40 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 pd.options.mode.chained_assignment = None
 
 
+def get_colors(count):
+    colors = []
+    cm = plt.cm.get_cmap('hsv', count)
+    for i in np.arange(count):
+        colors.append(cm(i))
+    return colors
+
+
+def dictionary_sort(my_dict):
+    keys = []
+    values = []
+    my_dict = sorted(my_dict.items(), key=lambda x: x[1], reverse=True)
+    for key, value in my_dict:
+        keys.append(key)
+        values.append(value)
+    return keys, values
+
+
+def build_error_diagram(data, failure_column):
+    failure_count = pd.value_counts(data[failure_column].values, sort=True)
+    failure_count_keys, failure_count_values = dictionary_sort(dict(failure_count))
+    failures = len(failure_count_keys)
+
+    plt.figure("Error chart")
+    plt.title(failure_column + ' ', fontsize=14)
+    plt.bar(np.arange(failures), failure_count_values)
+    plt.xticks(np.arange(failures), failure_count_keys, rotation=0, fontsize=12)
+    plt.yticks(fontsize=14)
+    plt.ylabel('Count of failures', fontsize=14)
+    plt.show()
+    # plt.close()
+
+    # return plt.show()
+
 class AnalyzeData:
     def __init__(self):
         self.PLOT_LABEL_FONT_SIZE = 14
@@ -26,33 +60,7 @@ class AnalyzeData:
             return data.describe()
         return data.describe()
 
-    def get_colors(self, count):
-        colors = []
-        cm = plt.cm.get_cmap('hsv', count)
-        for i in np.arange(count):
-            colors.append(cm(i))
-        return colors
 
-    def dictionary_sort(self, my_dict):
-        keys = []
-        values = []
-        my_dict = sorted(my_dict.items(), key=lambda x: x[1], reverse=True)
-        for key, value in my_dict:
-            keys.append(key)
-            values.append(value)
-        return keys, values
-
-    def build_error_diagram(self, data, failure_column):
-        failure_count = pd.value_counts(data[failure_column].values, sort=True)
-        failure_count_keys, failure_count_values = self.dictionary_sort(dict(failure_count))
-        failures = len(failure_count_keys)
-
-        plt.title(failure_column + ' ', fontsize=data.PLOT_LABEL_FONT_SIZE)
-        plt.bar(np.arange(failures), failure_count_values, color=self.get_colors(failures))
-        plt.xticks(np.arange(failures), failure_count_keys, rotation=0, fontsize=12)
-        plt.yticks(fontsize=self.PLOT_LABEL_FONT_SIZE)
-        plt.ylabel('Count of failures', fontsize=self.PLOT_LABEL_FONT_SIZE)
-        plt.show()
 
         print("No: " + str(failure_count['No']) + ' ' + "Yes: " + str(failure_count['Yes']))
         print("Total: " + str(failure_count['No'] + failure_count['Yes']))
