@@ -121,10 +121,10 @@ class AnalyzeWindow(tkinter.Toplevel):
             messagebox.showerror(title="Error", message="Please enter parameters")
 
     def check_entered_param(self, param_col, param_fail, param_id, param):
-        if param == 2:
+        if param == 1:
             if not param_fail.strip():
                 return False
-        elif param == 1:
+        elif param == 2:
             if not param_fail.strip() or not param_col.strip():
                 return False
         elif param == 5:

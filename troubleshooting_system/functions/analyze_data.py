@@ -49,7 +49,9 @@ def data_error(name_column, failure_column, data):
 
 
 def build_dependency_diagram(name_column, failure_column, data):
+    sns.set()
     plt.close("Dependecy diagram")
+    plt.close("Dependecy diagram (line)")
     diagram_param = data_error(name_column, failure_column, data)
     plt.figure("Dependecy diagram")
     plt.xlabel(name_column, fontsize=PLOT_LABEL_FONT_SIZE)
@@ -57,20 +59,30 @@ def build_dependency_diagram(name_column, failure_column, data):
     plt.bar(np.arange(diagram_param[0]), diagram_param[1], color=get_colors(diagram_param[0]))
     plt.xticks(np.arange(diagram_param[0]), diagram_param[2], rotation=0, fontsize=12)
     plt.yticks(fontsize=PLOT_LABEL_FONT_SIZE)
-    name_column = name_column.lower()
-    plt.title('Dependency between failure and ' + name_column, fontsize=PLOT_LABEL_FONT_SIZE)
-    plt.figure("Dependecy diagram (line)")
+    name_column_diagram = name_column.lower()
+    plt.title('Dependency between failure and ' + name_column_diagram, fontsize=PLOT_LABEL_FONT_SIZE)
+
+    plt.figure("Dependency diagram (line)")
+    plt.xlabel(name_column, fontsize=PLOT_LABEL_FONT_SIZE)
+    plt.ylabel('Count of failures', fontsize=PLOT_LABEL_FONT_SIZE)
+    plt.title('Dependency between failure and ' + name_column_diagram, fontsize=PLOT_LABEL_FONT_SIZE)
     plt.plot(diagram_param[2], diagram_param[1])
     plt.show()
 
 
 def build_pivot_chart(name_column, failure_column, data, id_col):
-    plt.figure("Error chart")
-    data.pivot_table(id_col, name_column, failure_column, 'count').plot(kind='bar', stacked=True)
+    sns.set()
+    data.pivot_table(id_col, name_column, failure_column, 'count').\
+        plot(kind='bar', stacked=True,
+             title="Pivot data of " + name_column.lower()+ " and " + failure_column.lower())
+    plt.show()
 
 
 def build_histogram(data, name_column):
+    sns.set()
+
     plt.figure("Histogram")
+    plt.title("Histogram " + name_column.lower())
     sns.distplot(data[name_column], color='g', bins=100, hist_kws={'alpha': 0.4})
 
     plt.show()
@@ -78,6 +90,7 @@ def build_histogram(data, name_column):
 
 def build_boxplot(data, name_column):
     plt.figure("Box plot")
+    plt.title("Box plot " + name_column.lower())
     sns.boxplot(x=data[name_column])
     plt.show()
 
@@ -101,6 +114,7 @@ def dictionary_sort(my_dict):
 
 
 def build_error_diagram(data, failure_column):
+    sns.set()
     failure_count = pd.value_counts(data[failure_column].values, sort=True)
     failure_count_keys, failure_count_values = dictionary_sort(dict(failure_count))
     failures = len(failure_count_keys)
