@@ -35,9 +35,9 @@ class AnalyzeWindow(tkinter.Toplevel):
         self.param_fail_entry.grid(row=4, column=0, sticky=W, padx=442)
         self.param_id_entry.grid(row=5, column=0, sticky=W, padx=442)
 
-        Label(self, text="Column name:").grid(row=3, column=0, sticky=W, padx=340)
-        Label(self, text="Failure column name:").grid(row=4, column=0, sticky=W, padx=303)
-        Label(self, text="Id column name:").grid(row=5, column=0, sticky=W, padx=328)
+        Label(self, text="Column name").grid(row=3, column=0, sticky=W, padx=355)
+        Label(self, text="Failure column name").grid(row=4, column=0, sticky=W, padx=318)
+        Label(self, text="Id column name").grid(row=5, column=0, sticky=W, padx=343)
         self.protocol("WM_DELETE_WINDOW", self.exit_window)
 
     def init_analyze_window(self, file):

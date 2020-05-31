@@ -1,30 +1,45 @@
 import tkinter
-import troubleshooting_system.windows.chart_window as cw
+import troubleshooting_system.functions.prediction_data as pd
 from tkinter import *
 
 
 class ParamPredictionWindow(tkinter.Toplevel):
-    def __init__(self, root, algorithm, count, fail_col_name):
+    def __init__(self, root, file, algorithm, count, fail_col_name):
         super().__init__(root)
-        lst = []
+        self.file = file
+        self.lst = []
         self.root = root
-        self.flag = StringVar()
-        self.col_name = StringVar()
-        self.init_param_analyze_window(count)
-        for i in range(1, count + 1):
-            lst.append(param)
-
+        self.algorithm = algorithm
+        self.fail_col_name = fail_col_name
+        self.init_param_analyze_window()
+        for i in range(count):
+            self.lst.append(StringVar())
+        self.labels = []
+        self.entries = []
+        for i in range(count):
+            self.labels.append(Label(self, text="[" + str(i + 1) + "]"))
+            self.labels[-1].grid(row=i + 1, column=0, sticky=W)
+            self.entries.append(Entry(self, textvariable=self.lst[i]))
+            self.entries[-1].grid(row=i + 1, column=0, sticky=W, padx=20)
         self.protocol("WM_DELETE_WINDOW", self.exit_window)
 
-    def init_param_analyze_window(self, count):
-        self.flag.set(NORMAL)
+    def init_param_analyze_window(self):
         self.title("Param window")
-        self.geometry("300x180+300+200")
-        self.resizable(False, False)
+        self.geometry("305x230+300+200")
 
+        btn_back = tkinter.Button(self, text="Back", command=self.exit_window, anchor=SW, padx=10)
+        btn_submit = tkinter.Button(self, text="Submit",command=self.prediction, anchor=SW, padx=10)
+        btn_submit.place(x=235, y=200)
+        btn_back.place(x=3, y=200)
 
-        for i in range(1, count + 1):
-            Entry(self, textvariable=self.col_name).grid(row=i, column=0, sticky=W, padx=120)
+        title_label = Label(self, text="Enter name of columns for predict", font="Arial 15")
+        title_label.grid(row=0, column=0, sticky=W, pady=15)
+
+    def prediction(self):
+        params = []
+        for el in self.lst:
+            params.append(el.get())
+        pd.prediction(pd.read_file(self.file), params, self.fail_col_name, self.algorithm)
 
     def exit_window(self):
         self.destroy()
