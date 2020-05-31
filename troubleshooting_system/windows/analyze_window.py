@@ -112,9 +112,9 @@ class AnalyzeWindow(tkinter.Toplevel):
             self.btn_submit['state'] = NORMAL
 
     def open_window_chart(self):
-        if self.check_entered_param(self.param_col_entry.get(), self.param_fail_entry.get(),
-                                    self.param_id_entry.get(), self.param.get()):
-            if not cw.build_chart(self.param_col_entry.get(), self.param_fail_entry.get(), self.param_id_entry.get(),
+        if self.check_entered_param(self.col_name.get(), self.fail_col_name.get(),
+                                    self.col_id_name.get(), self.param.get()):
+            if not cw.build_chart(self.col_name.get(), self.fail_col_name.get(), self.col_id_name.get(),
                                   self.param.get(), self.file):
                 messagebox.showerror(title="Error", message="Please enter correct parameters")
         else:

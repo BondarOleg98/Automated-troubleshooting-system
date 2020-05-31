@@ -28,6 +28,7 @@ class FunctionWindow(tkinter.Toplevel):
         btn_submit.place(x=230, y=150)
         btn_back.place(x=3, y=150)
         pw.PredictionWindow(self, self.file)
+        # aw.AnalyzeWindow(self, self.file)
         self.withdraw()
 
         analyze = Radiobutton(self, text="Analyze data", variable=self.var, value=0)

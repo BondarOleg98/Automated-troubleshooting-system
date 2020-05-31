@@ -50,10 +50,11 @@ def data_error(name_column, failure_column, data):
 
 def build_dependency_diagram(name_column, failure_column, data):
     sns.set()
-    plt.close("Dependecy diagram")
-    plt.close("Dependecy diagram (line)")
+    plt.close("Dependency diagram (line)")
+    plt.close("Dependency diagram")
+
     diagram_param = data_error(name_column, failure_column, data)
-    plt.figure("Dependecy diagram")
+    plt.figure("Dependency diagram")
     plt.xlabel(name_column, fontsize=PLOT_LABEL_FONT_SIZE)
     plt.ylabel('Count of failures', fontsize=PLOT_LABEL_FONT_SIZE)
     plt.bar(np.arange(diagram_param[0]), diagram_param[1], color=get_colors(diagram_param[0]))
