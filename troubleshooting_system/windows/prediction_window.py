@@ -1,5 +1,7 @@
 import tkinter
 from tkinter import *
+from tkinter import messagebox
+import troubleshooting_system.functions.prediction_data as pd
 import troubleshooting_system.windows.param_prediction_window as ppw
 
 
@@ -9,9 +11,12 @@ class PredictionWindow(tkinter.Toplevel):
         self.algorithm = IntVar()
         self.root = root
         self.file = file
-        self.count_data = IntVar()
+        self.count_data = StringVar()
         self.fail_col_name = StringVar()
         self.init_child()
+        self.btn_submit = tkinter.Button(self, text="Submit", command=self.open_param_window, anchor=SW, padx=10,
+                                    state=DISABLED)
+        self.btn_submit.place(x=230, y=220)
         self.protocol("WM_DELETE_WINDOW", self.exit_window)
 
     def init_child(self):
@@ -34,20 +39,52 @@ class PredictionWindow(tkinter.Toplevel):
         param_count_data.grid(row=3, column=0, sticky=W, padx=120)
 
         btn_back = tkinter.Button(self, text="Back", command=self.exit_window, anchor=SW, padx=10)
-        btn_submit = tkinter.Button(self, text="Submit", command=self.open_param_window, anchor=SW, padx=10)
-        btn_submit.place(x=230, y=220)
         btn_back.place(x=3, y=220)
 
         algorithm_label = Label(self, text="Algorithm fo study:", pady=3)
         algorithm_label.grid(row=4, column=0, sticky=W)
 
-        rf = Radiobutton(self, text="Random Forest", variable=self.algorithm, value=1)
-        lr = Radiobutton(self, text="Logical regression", variable=self.algorithm, value=2)
+        rf = Radiobutton(self, text="Random Forest", variable=self.algorithm, value=1, command=self.enable_button)
+        lr = Radiobutton(self, text="Logical regression", variable=self.algorithm, value=2, command=self.enable_button)
         rf.grid(row=5, column=0, sticky=W)
         lr.grid(row=6, column=0, sticky=W)
 
+    def enable_button(self):
+        if self.algorithm.get() >= 1:
+            self.btn_submit['state'] = NORMAL
+
     def open_param_window(self):
-        ppw.ParamPredictionWindow(self, self.file, self.algorithm.get(), self.count_data.get(), self.fail_col_name.get())
+        if not self.fail_col_name.get().strip():
+            messagebox.showerror(title="Error", message="Column must not be empty")
+        try:
+            var = pd.read_file(self.file)[self.fail_col_name.get()]
+            integer = int(self.count_data.get())
+            if not self.is_int(integer):
+                raise Exception("Count must be an positive integer")
+            if integer > 6 or integer == 0:
+                messagebox.showerror(title="Error", message="Count must be less than 7")
+            elif not self.fail_col_name.get().strip():
+                messagebox.showerror(title="Error", message="Column must not be empty")
+            ppw.ParamPredictionWindow(self, self.file, self.algorithm.get(), self.count_data.get(),
+                                      self.fail_col_name.get())
+        except KeyError:
+            messagebox.showerror(title="Error", message="Please enter correct name of column")
+        except ValueError:
+            messagebox.showerror(title="Error", message="Count must be an positive integer")
+        except Exception as e:
+            messagebox.showerror(title="Error", message=e)
+
+
+    def is_int(self, value):
+        try:
+            var = float(value)
+            if var.is_integer():
+                if var <= 0:
+                    return False
+                else:
+                    return True
+        except ValueError:
+            return False
 
     def exit_window(self):
         self.destroy()

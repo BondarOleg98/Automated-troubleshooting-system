@@ -12,24 +12,31 @@ class ParamPredictionWindow(tkinter.Toplevel):
         self.algorithm = algorithm
         self.fail_col_name = fail_col_name
         self.init_param_analyze_window()
-        for i in range(count):
+        for i in range(int(count)):
             self.lst.append(StringVar())
         self.labels = []
         self.entries = []
-        for i in range(count):
+        for i in range(int(count)):
             self.labels.append(Label(self, text="[" + str(i + 1) + "]"))
             self.labels[-1].grid(row=i + 1, column=0, sticky=W)
             self.entries.append(Entry(self, textvariable=self.lst[i]))
             self.entries[-1].grid(row=i + 1, column=0, sticky=W, padx=20)
+        print(len(self.lst))
+        if len(self.lst) > 0:
+            btn_submit = tkinter.Button(self, text="Submit", command=self.prediction, anchor=SW, padx=10)
+            btn_submit.place(x=235, y=200)
         self.protocol("WM_DELETE_WINDOW", self.exit_window)
 
     def init_param_analyze_window(self):
-        self.title("Param window")
+        if self.algorithm == 1:
+            self.title("Random forest")
+        else:
+            self.title("Logical regression")
+        self.grab_set()
+        self.focus_set()
         self.geometry("305x230+300+200")
 
         btn_back = tkinter.Button(self, text="Back", command=self.exit_window, anchor=SW, padx=10)
-        btn_submit = tkinter.Button(self, text="Submit",command=self.prediction, anchor=SW, padx=10)
-        btn_submit.place(x=235, y=200)
         btn_back.place(x=3, y=200)
 
         title_label = Label(self, text="Enter name of columns for predict", font="Arial 15")
