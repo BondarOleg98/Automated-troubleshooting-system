@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import metrics
 import joblib
+
 pd.options.mode.chained_assignment = None
 
 
@@ -23,9 +24,11 @@ def prediction(data, lst_param, fail_param, algorithm):
                                                                                               test_size=0.33,
                                                                                               random_state=42)
     if algorithm == 1:
-        data_prediction_rf(inputs_train, inputs_test, expected_output_train, expected_output_test, changed_data[1])
+        return data_prediction_rf(inputs_train, inputs_test, expected_output_train, expected_output_test,
+                                  changed_data[1])
     else:
-        data_prediction_lr(inputs_train, inputs_test, expected_output_train, expected_output_test, changed_data[1])
+        return data_prediction_lr(inputs_train, inputs_test, expected_output_train, expected_output_test,
+                                  changed_data[1])
 
 
 def data_prediction_rf(inputs_train, inputs_test, expected_output_train, expected_output_test, data_inputs):
@@ -34,8 +37,8 @@ def data_prediction_rf(inputs_train, inputs_test, expected_output_train, expecte
     # joblib.dump(rf, "E:\\Project\\Automated-troubleshooting-system\\troubleshooting_system\\data", compress=9)
     predicted = rf.predict(data_inputs)
     predict_for_test = rf.predict(inputs_test)
-    accuracy_error_prediction(inputs_test, expected_output_test, predict_for_test, rf)
-    out_predict_data(predicted, data_inputs, 'r')
+    return str(accuracy_error_prediction(inputs_test, expected_output_test, predict_for_test, rf)) + \
+           str(out_predict_data(predicted, data_inputs, 'l'))
 
 
 def data_prediction_lr(inputs_train, inputs_test, expected_output_train, expected_output_test, data_inputs):
@@ -44,8 +47,8 @@ def data_prediction_lr(inputs_train, inputs_test, expected_output_train, expecte
     predicted = lr.predict(data_inputs)
     # joblib.dump(lr, "E:\\Project\\Automated-troubleshooting-system\\troubleshooting_system\\data", compress=9)
     predict_for_test = lr.predict(inputs_test)
-    accuracy_error_prediction(inputs_test, expected_output_test, predict_for_test, lr)
-    out_predict_data(predicted, data_inputs, 'l')
+    return str(accuracy_error_prediction(inputs_test, expected_output_test, predict_for_test, lr)) + \
+           str(out_predict_data(predicted, data_inputs, 'l'))
 
 
 def out_predict_data(predicted, data_inputs, flag):
@@ -58,12 +61,11 @@ def out_predict_data(predicted, data_inputs, flag):
         data_inputs.to_csv('prediction_data_rf.csv')
     for element in predicted:
         if element == 1:
-            print("Error")
             count_yes += 1
         else:
             count_no += 1
-    print("No: " + str(count_no) + " " + "Yes: " + str(count_yes))
-    print("Total: " + (str)(count_no + count_yes))
+    return "No error: " + str(count_no) + " " + "Yes error: " + str(count_yes) + "\n" + \
+           "Total: " + str(count_no + count_yes)
 
 
 def load_prediction_model(name_model):
@@ -72,10 +74,11 @@ def load_prediction_model(name_model):
 
 def accuracy_error_prediction(inputs_test, expected_output_test, predicted, algorithm):
     accuracy = algorithm.score(inputs_test, expected_output_test)
-    print("Accuracy = {}%".format(accuracy * 100))
-    print('MAE:', metrics.mean_absolute_error(expected_output_test, predicted))
-    print('MSE:', metrics.mean_squared_error(expected_output_test, predicted))
-    print('RMSE:', np.sqrt(metrics.mean_squared_error(expected_output_test, predicted)))
+    return "Accuracy = {}%".format(accuracy * 100) + "\n" + \
+           "MAE: " + str(metrics.mean_absolute_error(expected_output_test, predicted)) + "\n" \
+                                                                                         "MSE: " + str(
+        metrics.mean_squared_error(expected_output_test, predicted)) + "\n" + \
+           "RMSE: " + str(np.sqrt(metrics.mean_squared_error(expected_output_test, predicted))) + "\n"
 
 
 def read_file(file):

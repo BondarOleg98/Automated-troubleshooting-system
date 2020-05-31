@@ -1,4 +1,5 @@
 import tkinter
+import troubleshooting_system.windows.result_prediction_window as rpw
 import troubleshooting_system.functions.prediction_data as pd
 from tkinter import *
 
@@ -21,7 +22,6 @@ class ParamPredictionWindow(tkinter.Toplevel):
             self.labels[-1].grid(row=i + 1, column=0, sticky=W)
             self.entries.append(Entry(self, textvariable=self.lst[i]))
             self.entries[-1].grid(row=i + 1, column=0, sticky=W, padx=20)
-        print(len(self.lst))
         if len(self.lst) > 0:
             btn_submit = tkinter.Button(self, text="Submit", command=self.prediction, anchor=SW, padx=10)
             btn_submit.place(x=235, y=200)
@@ -46,7 +46,7 @@ class ParamPredictionWindow(tkinter.Toplevel):
         params = []
         for el in self.lst:
             params.append(el.get())
-        pd.prediction(pd.read_file(self.file), params, self.fail_col_name, self.algorithm)
+        rpw.ResultPredictionWindow(self, pd.read_file(self.file), params, self.fail_col_name, self.algorithm)
 
     def exit_window(self):
         self.destroy()

@@ -2,6 +2,7 @@ import tkinter
 from tkinter import *
 from tkinter import messagebox
 import troubleshooting_system.functions.prediction_data as pd
+
 import troubleshooting_system.windows.param_prediction_window as ppw
 
 
@@ -15,7 +16,7 @@ class PredictionWindow(tkinter.Toplevel):
         self.fail_col_name = StringVar()
         self.init_child()
         self.btn_submit = tkinter.Button(self, text="Submit", command=self.open_param_window, anchor=SW, padx=10,
-                                    state=DISABLED)
+                                         state=DISABLED)
         self.btn_submit.place(x=230, y=220)
         self.protocol("WM_DELETE_WINDOW", self.exit_window)
 
@@ -73,7 +74,6 @@ class PredictionWindow(tkinter.Toplevel):
             messagebox.showerror(title="Error", message="Count must be an positive integer")
         except Exception as e:
             messagebox.showerror(title="Error", message=e)
-
 
     def is_int(self, value):
         try:
