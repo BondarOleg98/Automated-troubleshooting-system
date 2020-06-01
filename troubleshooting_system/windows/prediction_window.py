@@ -66,8 +66,12 @@ class PredictionWindow(tkinter.Toplevel):
                 messagebox.showerror(title="Error", message="Count must be less than 7")
             elif not self.fail_col_name.get().strip():
                 messagebox.showerror(title="Error", message="Column must not be empty")
+            flag = pd.check_value_col(pd.read_file(self.file), self.fail_col_name.get())
+            if flag is None:
+                raise Exception("Values for Failure column must be 0/1 (No/Yes)")
             ppw.ParamPredictionWindow(self, self.file, self.algorithm.get(), self.count_data.get(),
                                       self.fail_col_name.get())
+            self.withdraw()
         except KeyError:
             messagebox.showerror(title="Error", message="Please enter correct name of column")
         except ValueError:

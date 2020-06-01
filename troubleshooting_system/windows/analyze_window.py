@@ -54,7 +54,6 @@ class AnalyzeWindow(tkinter.Toplevel):
         file_label = Label(self, text="Name file: " + file, font="Arial 18", pady=15, padx=210)
         file_label.grid(row=0, column=0, sticky=W)
 
-        # frame.grid(fill='both')
         frame.grid(row=1, column=0, sticky=W)
 
         btn_back = tkinter.Button(self, text="Back", command=self.exit_window, anchor=SW, padx=10)

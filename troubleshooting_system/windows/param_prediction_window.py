@@ -1,4 +1,6 @@
 import tkinter
+from tkinter import messagebox
+
 import troubleshooting_system.windows.result_prediction_window as rpw
 import troubleshooting_system.functions.prediction_data as pd
 from tkinter import *
@@ -46,8 +48,13 @@ class ParamPredictionWindow(tkinter.Toplevel):
         params = []
         for el in self.lst:
             params.append(el.get())
-        rpw.ResultPredictionWindow(self, pd.read_file(self.file), params, self.fail_col_name, self.algorithm)
-
+        try:
+            flag = pd.prediction(pd.read_file(self.file), params, self.fail_col_name, self.algorithm)
+            rpw.ResultPredictionWindow(self, pd.read_file(self.file), params, self.fail_col_name,
+                                       self.algorithm, self.file)
+        except Exception as e:
+            messagebox.showerror(title="Error", message=e)
+        self.withdraw()
     def exit_window(self):
         self.destroy()
         self.root.deiconify()
