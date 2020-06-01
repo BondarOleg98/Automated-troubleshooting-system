@@ -1,4 +1,3 @@
-import os
 import tkinter
 import troubleshooting_system.windows.function_window as fw
 import troubleshooting_system.windows.dataset_window as dw

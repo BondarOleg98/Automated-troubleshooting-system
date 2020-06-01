@@ -27,9 +27,6 @@ class FunctionWindow(tkinter.Toplevel):
         btn_submit = tkinter.Button(self, text="Submit", command=self.choose_function, anchor=SW, padx=10)
         btn_submit.place(x=230, y=150)
         btn_back.place(x=3, y=150)
-        # pw.PredictionWindow(self, self.file) ###
-        # aw.AnalyzeWindow(self, self.file)#####
-        # self.withdraw()
 
         analyze = Radiobutton(self, text="Analyze data", variable=self.var, value=0)
         predict = Radiobutton(self, text="Prediction data", variable=self.var, value=1)
