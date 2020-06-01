@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LogisticRegression
@@ -74,7 +76,7 @@ def data_prediction_rf(inputs_train, inputs_test, expected_output_train, expecte
     predicted = rf.predict(data_inputs)
     predict_for_test = rf.predict(inputs_test)
     return str(accuracy_error_prediction(inputs_test, expected_output_test, predict_for_test, rf)) + \
-           str(out_predict_data(predicted, data_inputs, 'l'))
+           str(out_predict_data(predicted, data_inputs, 'r'))
 
 
 def data_prediction_lr(inputs_train, inputs_test, expected_output_train, expected_output_test, data_inputs):
@@ -91,10 +93,11 @@ def out_predict_data(predicted, data_inputs, flag):
     count_no = 0
     count_yes = 0
     data_inputs['Predicted failure'] = predicted
+    home = str(Path.home())
     if flag == 'l':
-        data_inputs.to_csv('prediction_data_lr.csv')
+        data_inputs.to_csv(home + "\\prediction_data_lr.csv")
     else:
-        data_inputs.to_csv('prediction_data_rf.csv')
+        data_inputs.to_csv(home + "\\prediction_data_rf.csv")
     for element in predicted:
         if element == 1:
             count_yes += 1

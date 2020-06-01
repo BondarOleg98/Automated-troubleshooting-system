@@ -50,11 +50,14 @@ class ParamPredictionWindow(tkinter.Toplevel):
             params.append(el.get())
         try:
             flag = pd.prediction(pd.read_file(self.file), params, self.fail_col_name, self.algorithm)
+            if flag is None:
+                raise Exception("Please, enter correct name of column")
             rpw.ResultPredictionWindow(self, pd.read_file(self.file), params, self.fail_col_name,
                                        self.algorithm, self.file)
+            self.withdraw()
         except Exception as e:
             messagebox.showerror(title="Error", message=e)
-        self.withdraw()
+
     def exit_window(self):
         self.destroy()
         self.root.deiconify()
