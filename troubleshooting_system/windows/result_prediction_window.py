@@ -1,5 +1,5 @@
-import os
 import tkinter
+from pathlib import Path
 from tkinter import *
 import troubleshooting_system.functions.prediction_data as pd
 import troubleshooting_system.windows.dataset_window as dw
@@ -39,11 +39,12 @@ class ResultPredictionWindow(tkinter.Toplevel):
         text.insert(END, success_label['text'], 'info')
         text.configure(state=DISABLED)
         text.grid(row=1, column=0, sticky=W)
+        home = str(Path.home())
 
-        if self.algorithm == 'l':
-            dw.DataWindow(self.root, 'E:\\Project\\Automated-troubleshooting-system\\troubleshooting_system\\prediction_data_lr.csv')
+        if self.algorithm == 2:
+            dw.DataWindow(self.root, home + "\\prediction_data_lr.csv")
         else:
-            dw.DataWindow(self.root, 'E:\\Project\\Automated-troubleshooting-system\\troubleshooting_system\\prediction_data_rf.csv')
+            dw.DataWindow(self.root, home + "\\prediction_data_rf.csv")
 
     def exit_window(self):
         self.destroy()
