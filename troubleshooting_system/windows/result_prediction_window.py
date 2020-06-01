@@ -32,7 +32,7 @@ class ResultPredictionWindow(tkinter.Toplevel):
         btn_back = tkinter.Button(self, text="Back", command=self.exit_window, anchor=SW, padx=10)
         btn_back.place(x=3, y=210)
 
-        success_label = Label(text="\nResult was written\nin file prediction_data_<algorithm>.csv")
+        success_label = Label(text="\nResult was written\nin file prediction_data_<algorithm>")
         text = Text(self, width=400, height=8)
         text.insert(1.0, pd.prediction(self.data, self.params, self.fail_col_name, self.algorithm))
         text.tag_config('info', foreground="green")

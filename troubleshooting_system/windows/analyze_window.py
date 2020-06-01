@@ -43,7 +43,7 @@ class AnalyzeWindow(tkinter.Toplevel):
     def init_analyze_window(self, file):
         self.title("Analyze window")
         self.geometry("570x550+300+80")
-        # self.resizable(False, False)
+        self.resizable(False, False)
         self.param.set(0)
 
         frame = tkinter.Frame(self)
