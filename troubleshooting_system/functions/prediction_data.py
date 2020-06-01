@@ -2,86 +2,126 @@ import pandas as pd
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-import joblib
 from sklearn.ensemble import RandomForestClassifier
+from sklearn import metrics
+import joblib
+import math
 
 pd.options.mode.chained_assignment = None
 
-FILE_PATH = '../data/machine.csv'
 
-data = pd.read_csv(FILE_PATH)
-data.Date = data.Date.apply(pd.to_datetime)
+def replace_value_data(data, lst_param, fail_param):
+    try:
+        if check_value_col(data, fail_param) is None:
+            raise Exception()
+        expected_output = check_value_col(data, fail_param)
+        data_inputs = data[lst_param]
+        return expected_output, data_inputs
+    except KeyError:
+        return None
+    except Exception:
+        return None
 
 
-def replace_value_data(data):
-    data_inputs = data[
-        ['Temperature', 'Humidity', 'Hours Since Previous Failure', 'Date.year', 'Date.month', 'Date.day-of-month',
-         'Date.day-of-week']]
-    expected_output = data['Failure']
-    expected_output = np.where(expected_output == "No", 0, 1)
-    return expected_output, data_inputs
+def check_value_col(data, fail_param):
+    try:
+        expected_output = data[fail_param]
+        if data[fail_param].dtype == object:
+            count_flag = 0
+            count_nan = 0
+            for el in expected_output:
+                if el == "No" or el == "Yes":
+                    count_flag += 1
+                elif type(el) != str:
+                    nan = float(el)
+                    if math.isnan(nan):
+                        count_nan += 1
+            divider = expected_output.size - count_nan - count_flag
+            if divider != 0:
+                raise Exception()
+            expected_output = np.where(expected_output == "No", 0, 1)
+            data[fail_param] = expected_output
+            median = data[fail_param].median()
+            data[fail_param].fillna(median, inplace=True)
+            expected_output = data[fail_param]
+        return expected_output
+    except Exception:
+        return None
 
 
-def prediction(data):
-    changed_data = replace_value_data(data)
+def prediction(data, lst_param, fail_param, algorithm):
+    changed_data = replace_value_data(data, lst_param, fail_param)
+
+    if changed_data is None:
+        return None
+
     inputs_train, inputs_test, expected_output_train, expected_output_test = train_test_split(changed_data[1],
                                                                                               changed_data[0],
                                                                                               test_size=0.33,
                                                                                               random_state=42)
-    dataPrediction(inputs_train, inputs_test, expected_output_train, expected_output_test, changed_data[1])
+    if algorithm == 1:
+        return data_prediction_rf(inputs_train, inputs_test, expected_output_train, expected_output_test,
+                                  changed_data[1])
+    else:
+        return data_prediction_lr(inputs_train, inputs_test, expected_output_train, expected_output_test,
+                                  changed_data[1])
 
 
-def dataPrediction(inputs_train, inputs_test, expected_output_train, expected_output_test, data_inputs):
+def data_prediction_rf(inputs_train, inputs_test, expected_output_train, expected_output_test, data_inputs):
     rf = RandomForestClassifier(n_estimators=100)
     rf.fit(inputs_train, expected_output_train)
-    joblib.dump(rf, "../data/mechanizm_model", compress=9)
+    # joblib.dump(rf, "E:\\Project\\Automated-troubleshooting-system\\troubleshooting_system\\data", compress=9)
+    predicted = rf.predict(data_inputs)
+    predict_for_test = rf.predict(inputs_test)
+    return str(accuracy_error_prediction(inputs_test, expected_output_test, predict_for_test, rf)) + \
+           str(out_predict_data(predicted, data_inputs, 'l'))
 
+
+def data_prediction_lr(inputs_train, inputs_test, expected_output_train, expected_output_test, data_inputs):
     lr = LogisticRegression(max_iter=8000)
     lr.fit(inputs_train, expected_output_train)
-    predicted_classes = lr.predict(inputs_test)
-    # predicted_classes
-    predictions = pd.Series(predicted_classes)
-    parameters = lr.coef_
-
-    pred = rf.predict(data_inputs)
-    outPredictData(pred, parameters, data_inputs)
-    # accuracyErrorPrediction(inputs_train, inputs_test, expected_output_test, predicted_classes, rf, lr)
+    predicted = lr.predict(data_inputs)
+    # joblib.dump(lr, "E:\\Project\\Automated-troubleshooting-system\\troubleshooting_system\\data", compress=9)
+    predict_for_test = lr.predict(inputs_test)
+    return str(accuracy_error_prediction(inputs_test, expected_output_test, predict_for_test, lr)) + \
+           str(out_predict_data(predicted, data_inputs, 'l'))
 
 
-def outPredictData(pred, parameters, data_inputs):
+def out_predict_data(predicted, data_inputs, flag):
     count_no = 0
     count_yes = 0
-    dictionary = {}
-    my_list = []
-    data_inputs['Pred failure'] = pred
-
-    data_inputs.to_csv('prediction_data.csv')
-
-    for element in pred:
+    data_inputs['Predicted failure'] = predicted
+    if flag == 'l':
+        data_inputs.to_csv('prediction_data_lr.csv')
+    else:
+        data_inputs.to_csv('prediction_data_rf.csv')
+    for element in predicted:
         if element == 1:
-            count_no += 1
-        else:
             count_yes += 1
-    print("No: " + str(count_yes) + " " + "Yes: " + str(count_no))
-    print("Total: " + (str)(count_no + count_yes))
-    print("#######################################")
-    print(parameters)
-    print("#######################################")
-    for row in data_inputs.iterrows():
-        if row[1]['Pred failure'] == 1:
-            dictionary['Failure'] = 1
-            dictionary['Temperature'] = row[1]['Temperature']
-            dictionary['Humidity'] = row[1]['Humidity']
-            my_list.append(dictionary)
-
-    for element in my_list:
-        print(element)
-    print(len(my_list))
+        else:
+            count_no += 1
+    return "No error: " + str(count_no) + " " + "Yes error: " + str(count_yes) + "\n" + \
+           "Total: " + str(count_no + count_yes)
 
 
-def loadPredictionModel(name_model):
+def load_prediction_model(name_model):
     return joblib.load(name_model)
 
 
-data = pd.read_csv(FILE_PATH, index_col=0)
-prediction(data)
+def accuracy_error_prediction(inputs_test, expected_output_test, predicted, algorithm):
+    accuracy = algorithm.score(inputs_test, expected_output_test)
+    return "Accuracy = {}%".format(accuracy * 100) + "\n" + \
+           "MAE: " + str(metrics.mean_absolute_error(expected_output_test, predicted)) + "\n" \
+                                                                                         "MSE: " + str(
+        metrics.mean_squared_error(expected_output_test, predicted)) + "\n" + \
+           "RMSE: " + str(np.sqrt(metrics.mean_squared_error(expected_output_test, predicted))) + "\n"
+
+
+def read_file(file):
+    data = pd.read_csv(file, index_col=0)
+    for col in data.columns:
+        if data[col].dtype == object:
+            continue
+        median = data[col].median()
+        data[col].fillna(median, inplace=True)
+    return data

@@ -1,6 +1,7 @@
 import os
 import tkinter
 import troubleshooting_system.windows.function_window as fw
+import troubleshooting_system.windows.dataset_window as dw
 from tkinter import filedialog, messagebox
 from tkinter import *
 
@@ -25,8 +26,9 @@ class WelcomeWindow(tkinter.Frame):
         choose_frame = LabelFrame(text="Choose file", height=200, width=200, font="Arial 12")
         btn = tkinter.Button(choose_frame, command=self.open_dialog, image=self.icon)
         btn.pack()
-        # temp = "E:\\test.csv"
-        # fw.FunctionWindow(self.root, temp)
+        # temp = "E:\\test.csv" #####
+        # fw.FunctionWindow(self.root, temp) ########
+        # dw.DataWindow(self.root, temp) ######
         welcome_label.pack()
         choose_frame.pack()
         # self.root.withdraw()
@@ -37,8 +39,9 @@ class WelcomeWindow(tkinter.Frame):
             initialfile='tmp',
             filetypes=[("CSV", "*.csv")])
         if file != "":
-            os.startfile(file)
+            # os.startfile(file)
             fw.FunctionWindow(self.root, file)
+            dw.DataWindow(self.root, file)
             self.root.withdraw()
 
     def menu_window(self):
