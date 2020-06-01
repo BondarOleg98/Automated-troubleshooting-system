@@ -1,5 +1,5 @@
-import os
 import tkinter
+from pathlib import Path
 from tkinter import *
 import troubleshooting_system.functions.prediction_data as pd
 import troubleshooting_system.windows.dataset_window as dw
@@ -32,18 +32,19 @@ class ResultPredictionWindow(tkinter.Toplevel):
         btn_back = tkinter.Button(self, text="Back", command=self.exit_window, anchor=SW, padx=10)
         btn_back.place(x=3, y=210)
 
-        success_label = Label(text="\nResult was written\nin file prediction_data_<algorithm>.csv")
+        success_label = Label(text="\nResult was written\nin file prediction_data_<algorithm>")
         text = Text(self, width=400, height=8)
         text.insert(1.0, pd.prediction(self.data, self.params, self.fail_col_name, self.algorithm))
         text.tag_config('info', foreground="green")
         text.insert(END, success_label['text'], 'info')
         text.configure(state=DISABLED)
         text.grid(row=1, column=0, sticky=W)
+        home = str(Path.home())
 
-        if self.algorithm == 'l':
-            dw.DataWindow(self.root, 'E:\\Project\\Automated-troubleshooting-system\\troubleshooting_system\\prediction_data_lr.csv')
+        if self.algorithm == 2:
+            dw.DataWindow(self.root, home + "\\prediction_data_lr.csv")
         else:
-            dw.DataWindow(self.root, 'E:\\Project\\Automated-troubleshooting-system\\troubleshooting_system\\prediction_data_rf.csv')
+            dw.DataWindow(self.root, home + "\\prediction_data_rf.csv")
 
     def exit_window(self):
         self.destroy()
