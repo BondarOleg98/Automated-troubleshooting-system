@@ -3,7 +3,7 @@ from tkinter import messagebox
 from pandastable import Table
 import tkinter
 from tkinter import *
-import troubleshooting_system.data_science_layer.analyze_module as ad
+import troubleshooting_system.data_analyze_layer.data_processing_module as dpm
 
 
 class DataWindow(tkinter.Toplevel):
@@ -18,16 +18,13 @@ class DataWindow(tkinter.Toplevel):
     def init_data_window(self):
         self.title("Dataset window")
         self.geometry("600x400+300+200")
-        self.focus_get()
         self.resizable(False, False)
         self.var.set(0)
 
         frame = tkinter.Frame(self)
-        pt = Table(frame, dataframe=ad.read_file(self.file), height=400)
+        pt = Table(frame, dataframe=dpm.read_file(self.file), height=400)
         pt.show()
         frame.pack(fill='both')
 
     def exit_window(self):
-        if messagebox.askyesno("Exit", "Do you want to quit the application?"):
-            self.quit()
-
+        self.destroy()

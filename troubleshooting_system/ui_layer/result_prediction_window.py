@@ -1,7 +1,7 @@
 import tkinter
 from pathlib import Path
 from tkinter import *
-import troubleshooting_system.data_science_layer.ml_module as pd
+import troubleshooting_system.data_analyze_layer.prediction_module as pd
 import troubleshooting_system.ui_layer.show_dataset_window as dw
 
 

@@ -1,16 +1,17 @@
 import unittest
-import troubleshooting_system.data_science_layer.analyze_module as ad
+import troubleshooting_system.data_analyze_layer.analyze_module as ad
+import troubleshooting_system.data_analyze_layer.data_processing_module as dpm
 import pandas as pd
 
 
 class MyTestCase(unittest.TestCase):
-    path = "/troubleshooting_system/data_layer\\test_data.csv"
+    path = "E:\\Project\\Automated-troubleshooting-system\\troubleshooting_system\\data_layer\\test_data.csv"
 
     def test_on_correct_return_data(self):
-        self.assertIsNotNone(ad.read_file(self.path), "Input data_layer is None")
-        self.assertTrue(type(ad.read_file(self.path)) == type(pd.DataFrame()))
+        self.assertIsNotNone(dpm.read_file(self.path), "Input data_layer is None")
+        self.assertTrue(type(dpm.read_file(self.path)) == type(pd.DataFrame()))
         self.assertTrue(type(ad.find_statistics_param(self.path)), type(pd.DataFrame()))
-        lst_return = ad.data_error('Temperature', 'Failure', ad.read_file(self.path))
+        lst_return = ad.data_error('Temperature', 'Failure', dpm.read_file(self.path))
         self.assertTrue(len(lst_return) == 3)
         self.assertEqual(type(lst_return[0]), int)
         self.assertEqual(type(lst_return[1]), list)

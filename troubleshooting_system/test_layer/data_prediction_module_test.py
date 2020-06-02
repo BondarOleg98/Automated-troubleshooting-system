@@ -3,16 +3,17 @@ import os
 import unittest
 from pathlib import Path
 
-import troubleshooting_system.data_science_layer.ml_module as pd
+import troubleshooting_system.data_analyze_layer.prediction_module as pd
+import troubleshooting_system.data_analyze_layer.data_processing_module as dpm
 import pandas as pnd
 
 
 class TestPredictionFunctionCase(unittest.TestCase):
-    path = "/troubleshooting_system/data_layer\\test_data.csv"
+    path = "E:\\Project\\Automated-troubleshooting-system\\troubleshooting_system\\data_layer\\test_data.csv"
 
     def test_read_file_on_correct_return(self):
-        self.assertIsNotNone(pd.read_file(self.path), "Input data_layer is None")
-        self.assertTrue(type(pd.read_file(self.path)) == type(pnd.DataFrame()))
+        self.assertIsNotNone(dpm.read_file_prediction(self.path), "Input data_layer is None")
+        self.assertTrue(type(dpm.read_file_prediction(self.path)) == type(pnd.DataFrame()))
 
     def test_read_file_on_fill_empty(self):
         count_input_data = 0
@@ -21,7 +22,7 @@ class TestPredictionFunctionCase(unittest.TestCase):
             nan = float(el)
             if math.isnan(nan):
                 count_input_data += 1
-        for el in pd.read_file(self.path)['Hours Since Previous Failure']:
+        for el in dpm.read_file_prediction(self.path)['Hours Since Previous Failure']:
             nan = float(el)
             if math.isnan(nan):
                 count_output_data += 1
@@ -29,7 +30,7 @@ class TestPredictionFunctionCase(unittest.TestCase):
 
     def test_correct_fill_median(self):
         current_val = pnd.read_csv(self.path)['Hours Since Previous Failure'].median()
-        expected_val = pd.read_file(self.path)['Hours Since Previous Failure'][1]
+        expected_val = dpm.read_file_prediction(self.path)['Hours Since Previous Failure'][1]
         self.assertEqual(current_val, expected_val)
 
     def test_replace_value_data_correct_result(self):

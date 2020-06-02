@@ -1,8 +1,8 @@
 import tkinter
 from tkinter import *
 from tkinter import messagebox
-import troubleshooting_system.data_science_layer.ml_module as pd
-
+import troubleshooting_system.data_analyze_layer.data_processing_module as dpm
+import troubleshooting_system.data_analyze_layer.validation_module as vm
 import troubleshooting_system.ui_layer.param_prediction_window as ppw
 
 
@@ -56,7 +56,7 @@ class PredictionWindow(tkinter.Toplevel):
         if not self.fail_col_name.get().strip():
             messagebox.showerror(title="Error", message="Column must not be empty")
         try:
-            var = pd.read_file(self.file)[self.fail_col_name.get()]
+            var = dpm.read_file_prediction(self.file)[self.fail_col_name.get()]
             integer = int(self.count_data.get())
             if not self.is_int(integer):
                 raise Exception("Count must be an positive integer")
@@ -64,7 +64,7 @@ class PredictionWindow(tkinter.Toplevel):
                 messagebox.showerror(title="Error", message="Count must be less than 7")
             elif not self.fail_col_name.get().strip():
                 messagebox.showerror(title="Error", message="Column must not be empty")
-            flag = pd.check_value_col(pd.read_file(self.file), self.fail_col_name.get())
+            flag = vm.check_value_col(dpm.read_file_prediction(self.file), self.fail_col_name.get())
             if flag is None:
                 raise Exception("Values for Failure column must be 0/1 (No/Yes)")
             ppw.ParamPredictionWindow(self, self.file, self.algorithm.get(), self.count_data.get(),
