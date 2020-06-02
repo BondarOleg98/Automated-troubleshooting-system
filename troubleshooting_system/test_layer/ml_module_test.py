@@ -3,15 +3,15 @@ import os
 import unittest
 from pathlib import Path
 
-import troubleshooting_system.functions.prediction_data as pd
+import troubleshooting_system.data_science_layer.ml_module as pd
 import pandas as pnd
 
 
 class TestPredictionFunctionCase(unittest.TestCase):
-    path = "E:\\Project\\Automated-troubleshooting-system\\troubleshooting_system\\data\\test_data.csv"
+    path = "/troubleshooting_system/data_layer\\test_data.csv"
 
     def test_read_file_on_correct_return(self):
-        self.assertIsNotNone(pd.read_file(self.path), "Input data is None")
+        self.assertIsNotNone(pd.read_file(self.path), "Input data_layer is None")
         self.assertTrue(type(pd.read_file(self.path)) == type(pnd.DataFrame()))
 
     def test_read_file_on_fill_empty(self):

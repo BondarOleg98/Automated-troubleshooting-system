@@ -75,7 +75,7 @@ def build_pivot_chart(name_column, failure_column, data, id_col):
     sns.set()
     data.pivot_table(id_col, name_column, failure_column, 'count').\
         plot(kind='bar', stacked=True,
-             title="Pivot data of " + name_column.lower()+ " and " + failure_column.lower())
+             title="Pivot data_layer of " + name_column.lower()+ " and " + failure_column.lower())
     plt.show()
 
 

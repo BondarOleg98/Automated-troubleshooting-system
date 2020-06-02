@@ -1,8 +1,8 @@
 import tkinter
 from tkinter import messagebox
 
-import troubleshooting_system.windows.result_prediction_window as rpw
-import troubleshooting_system.functions.prediction_data as pd
+import troubleshooting_system.ui_layer.result_prediction_window as rpw
+import troubleshooting_system.data_science_layer.ml_module as pd
 from tkinter import *
 
 

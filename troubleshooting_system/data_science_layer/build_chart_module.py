@@ -1,4 +1,4 @@
-import troubleshooting_system.functions.analyze_data as ad
+import troubleshooting_system.data_science_layer.analyze_module as ad
 
 
 def build_chart(param_col, param_fail, param_id, param, file):

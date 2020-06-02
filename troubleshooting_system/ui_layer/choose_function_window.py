@@ -1,7 +1,7 @@
 import tkinter
 from tkinter import *
-import troubleshooting_system.windows.analyze_window as aw
-import troubleshooting_system.windows.prediction_window as pw
+import troubleshooting_system.ui_layer.analyze_window as aw
+import troubleshooting_system.ui_layer.start_prediction_window as pw
 
 
 class FunctionWindow(tkinter.Toplevel):
@@ -28,8 +28,8 @@ class FunctionWindow(tkinter.Toplevel):
         btn_submit.place(x=230, y=150)
         btn_back.place(x=3, y=150)
 
-        analyze = Radiobutton(self, text="Analyze data", variable=self.var, value=0)
-        predict = Radiobutton(self, text="Prediction data", variable=self.var, value=1)
+        analyze = Radiobutton(self, text="Analyze data_layer", variable=self.var, value=0)
+        predict = Radiobutton(self, text="Prediction data_layer", variable=self.var, value=1)
 
         analyze.pack()
         predict.pack()

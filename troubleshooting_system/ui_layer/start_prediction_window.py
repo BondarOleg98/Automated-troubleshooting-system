@@ -1,9 +1,9 @@
 import tkinter
 from tkinter import *
 from tkinter import messagebox
-import troubleshooting_system.functions.prediction_data as pd
+import troubleshooting_system.data_science_layer.ml_module as pd
 
-import troubleshooting_system.windows.param_prediction_window as ppw
+import troubleshooting_system.ui_layer.param_prediction_window as ppw
 
 
 class PredictionWindow(tkinter.Toplevel):
@@ -14,18 +14,16 @@ class PredictionWindow(tkinter.Toplevel):
         self.file = file
         self.count_data = StringVar()
         self.fail_col_name = StringVar()
-        self.init_child()
+        self.init_predicted_window()
         self.btn_submit = tkinter.Button(self, text="Submit", command=self.open_param_window, anchor=SW, padx=10,
                                          state=DISABLED)
         self.btn_submit.place(x=230, y=220)
         self.protocol("WM_DELETE_WINDOW", self.exit_window)
 
-    def init_child(self):
+    def init_predicted_window(self):
         self.title("Prediction window")
         self.geometry("300x250+300+200")
         self.resizable(False, False)
-        # self.grab_set()
-        # self.focus_set()
         self.algorithm.set(0)
 
         title_label = Label(self, text="Please enter parameters", font="Arial 15", pady=15, padx=40)

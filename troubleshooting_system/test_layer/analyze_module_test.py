@@ -1,14 +1,13 @@
 import unittest
-import troubleshooting_system.functions.analyze_data as ad
+import troubleshooting_system.data_science_layer.analyze_module as ad
 import pandas as pd
-import troubleshooting_system.windows.chart_window as cw
 
 
 class MyTestCase(unittest.TestCase):
-    path = "E:\\Project\\Automated-troubleshooting-system\\troubleshooting_system\\data\\test_data.csv"
+    path = "/troubleshooting_system/data_layer\\test_data.csv"
 
     def test_on_correct_return_data(self):
-        self.assertIsNotNone(ad.read_file(self.path), "Input data is None")
+        self.assertIsNotNone(ad.read_file(self.path), "Input data_layer is None")
         self.assertTrue(type(ad.read_file(self.path)) == type(pd.DataFrame()))
         self.assertTrue(type(ad.find_statistics_param(self.path)), type(pd.DataFrame()))
         lst_return = ad.data_error('Temperature', 'Failure', ad.read_file(self.path))

@@ -1,7 +1,9 @@
+from tkinter import messagebox
+
 from pandastable import Table
 import tkinter
 from tkinter import *
-import troubleshooting_system.functions.analyze_data as ad
+import troubleshooting_system.data_science_layer.analyze_module as ad
 
 
 class DataWindow(tkinter.Toplevel):
@@ -10,10 +12,10 @@ class DataWindow(tkinter.Toplevel):
         self.var = IntVar()
         self.root = root
         self.file = file
-        self.init_functional_window()
+        self.init_data_window()
         self.protocol("WM_DELETE_WINDOW", self.exit_window)
 
-    def init_functional_window(self):
+    def init_data_window(self):
         self.title("Dataset window")
         self.geometry("600x400+300+200")
         self.focus_get()
@@ -26,5 +28,6 @@ class DataWindow(tkinter.Toplevel):
         frame.pack(fill='both')
 
     def exit_window(self):
-        self.destroy()
+        if messagebox.askyesno("Exit", "Do you want to quit the application?"):
+            self.quit()
 

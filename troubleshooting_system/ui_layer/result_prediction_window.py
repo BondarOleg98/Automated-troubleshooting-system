@@ -1,8 +1,8 @@
 import tkinter
 from pathlib import Path
 from tkinter import *
-import troubleshooting_system.functions.prediction_data as pd
-import troubleshooting_system.windows.dataset_window as dw
+import troubleshooting_system.data_science_layer.ml_module as pd
+import troubleshooting_system.ui_layer.show_dataset_window as dw
 
 
 class ResultPredictionWindow(tkinter.Toplevel):
