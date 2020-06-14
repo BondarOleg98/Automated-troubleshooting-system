@@ -1,10 +1,10 @@
 import unittest
-import troubleshooting_system.data_analyze_layer.analyze_module as ad
-import troubleshooting_system.data_analyze_layer.data_processing_module as dpm
+import data_analyze_layer.analyze_module as ad
+import data_analyze_layer.data_processing_module as dpm
 import pandas as pd
 
 
-class MyTestCase(unittest.TestCase):
+class TestDataAnalyzeCase(unittest.TestCase):
     path = "E:\\Project\\Automated-troubleshooting-system\\troubleshooting_system\\data_layer\\test_data.csv"
 
     def test_on_correct_return_data(self):

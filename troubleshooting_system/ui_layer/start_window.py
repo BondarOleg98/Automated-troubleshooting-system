@@ -1,6 +1,6 @@
 import tkinter
-import troubleshooting_system.ui_layer.choose_function_window as cfw
-import troubleshooting_system.ui_layer.show_dataset_window as dw
+import ui_layer.choose_function_window as cfw
+import ui_layer.show_dataset_window as dw
 from tkinter import filedialog, messagebox
 from tkinter import *
 

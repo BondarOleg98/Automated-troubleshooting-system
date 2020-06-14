@@ -2,9 +2,8 @@ import math
 import os
 import unittest
 from pathlib import Path
-
-import troubleshooting_system.data_analyze_layer.prediction_module as pd
-import troubleshooting_system.data_analyze_layer.data_processing_module as dpm
+import data_analyze_layer.prediction_module as pd
+import data_analyze_layer.data_processing_module as dpm
 import pandas as pnd
 
 

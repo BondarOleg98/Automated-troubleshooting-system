@@ -1,10 +1,10 @@
 import os
 import tkinter
-import troubleshooting_system.data_analyze_layer.analyze_module as ad
+import data_analyze_layer.analyze_module as ad
 from tkinter import *
 from tkinter import messagebox
 from pandastable import Table
-import troubleshooting_system.data_analyze_layer.build_chart_module as cw
+import data_analyze_layer.build_chart_module as cw
 
 
 class AnalyzeWindow(tkinter.Toplevel):
@@ -135,6 +135,5 @@ class AnalyzeWindow(tkinter.Toplevel):
         return True
 
     def exit_window(self):
-        self.quit()
         self.destroy()
         self.root.deiconify()

@@ -1,5 +1,5 @@
-import troubleshooting_system.data_analyze_layer.analyze_module as adm
-import troubleshooting_system.data_analyze_layer.data_processing_module as dpm
+import data_analyze_layer.analyze_module as adm
+import data_analyze_layer.data_processing_module as dpm
 import matplotlib.pyplot as plt
 import numpy as np
 

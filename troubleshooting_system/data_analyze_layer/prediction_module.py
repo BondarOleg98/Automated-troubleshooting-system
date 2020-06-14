@@ -1,9 +1,9 @@
 import uuid
 import joblib
 import pandas as pd
-from troubleshooting_system.data_analyze_layer.accuracy_module import accuracy_error_prediction
-from troubleshooting_system.data_analyze_layer.data_processing_module import replace_value_data
-from troubleshooting_system.data_analyze_layer.save_module import out_predict_data
+from data_analyze_layer.accuracy_module import accuracy_error_prediction
+from data_analyze_layer.data_processing_module import replace_value_data
+from data_analyze_layer.save_module import out_predict_data
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier

@@ -1,6 +1,5 @@
 import pandas as pd
-
-from troubleshooting_system.data_analyze_layer.validation_module import check_value_col
+from data_analyze_layer.validation_module import check_value_col
 
 
 def read_file_prediction(file):

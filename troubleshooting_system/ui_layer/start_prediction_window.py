@@ -1,9 +1,9 @@
 import tkinter
 from tkinter import *
 from tkinter import messagebox
-import troubleshooting_system.data_analyze_layer.data_processing_module as dpm
-import troubleshooting_system.data_analyze_layer.validation_module as vm
-import troubleshooting_system.ui_layer.param_prediction_window as ppw
+import data_analyze_layer.data_processing_module as dpm
+import data_analyze_layer.validation_module as vm
+import ui_layer.param_prediction_window as ppw
 
 
 class PredictionWindow(tkinter.Toplevel):

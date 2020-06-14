@@ -1,9 +1,7 @@
-from tkinter import messagebox
-
 from pandastable import Table
 import tkinter
 from tkinter import *
-import troubleshooting_system.data_analyze_layer.data_processing_module as dpm
+import data_analyze_layer.data_processing_module as dpm
 
 
 class DataWindow(tkinter.Toplevel):

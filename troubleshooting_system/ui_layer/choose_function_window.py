@@ -1,7 +1,7 @@
 import tkinter
 from tkinter import *
-import troubleshooting_system.ui_layer.analyze_window as aw
-import troubleshooting_system.ui_layer.start_prediction_window as pw
+import ui_layer.analyze_window as aw
+import ui_layer.start_prediction_window as pw
 
 
 class FunctionWindow(tkinter.Toplevel):

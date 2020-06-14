@@ -1,9 +1,9 @@
 import tkinter
 from tkinter import messagebox
 
-import troubleshooting_system.ui_layer.result_prediction_window as rpw
-import troubleshooting_system.data_analyze_layer.prediction_module as pd
-import troubleshooting_system.data_analyze_layer.data_processing_module as dpm
+import ui_layer.result_prediction_window as rpw
+import data_analyze_layer.prediction_module as pd
+import data_analyze_layer.data_processing_module as dpm
 from tkinter import *
 
 

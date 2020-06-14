@@ -1,4 +1,4 @@
-import troubleshooting_system.ui_layer.start_window as ww
+import ui_layer.start_window as ww
 from tkinter import *
 from PIL import ImageTk, Image
 

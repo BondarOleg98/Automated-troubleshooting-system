@@ -2,8 +2,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from troubleshooting_system.data_analyze_layer.build_chart_module import get_colors
-from troubleshooting_system.data_analyze_layer.data_processing_module import data_error, dictionary_sort
+from data_analyze_layer.build_chart_module import get_colors
+from data_analyze_layer.data_processing_module import data_error, dictionary_sort
 
 pd.options.mode.chained_assignment = None
 
