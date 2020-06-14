@@ -2,15 +2,12 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from data_analyze_layer.build_chart_module import get_colors
+from data_analyze_layer.data_processing_module import data_error, dictionary_sort
 
 pd.options.mode.chained_assignment = None
 
 PLOT_LABEL_FONT_SIZE = 14
-
-
-def read_file(file):
-    data = pd.read_csv(file)
-    return data
 
 
 def find_statistics_param(file):
@@ -23,29 +20,6 @@ def find_statistics_param(file):
     except KeyError:
         return data.describe()
     return data.describe()
-
-
-def data_error(name_column, failure_column, data):
-    array = []
-    count_array = []
-    data_set = set()
-    for row in data.iterrows():
-        if row[1][failure_column] == 'Yes':
-            array.append(row[1][name_column])
-        if row[1][failure_column] == 1:
-            array.append(row[1][name_column])
-    array.sort()
-
-    for element in array:
-        data_set.add(element)
-    data_set = sorted(data_set, key=None, reverse=False)
-
-    for element_set in data_set:
-        count_value = array.count(element_set)
-        count_array.append(count_value)
-    count_value = len(count_array)
-
-    return count_value, count_array, data_set
 
 
 def build_dependency_diagram(name_column, failure_column, data):
@@ -73,19 +47,17 @@ def build_dependency_diagram(name_column, failure_column, data):
 
 def build_pivot_chart(name_column, failure_column, data, id_col):
     sns.set()
-    data.pivot_table(id_col, name_column, failure_column, 'count').\
+    data.pivot_table(id_col, name_column, failure_column, 'count'). \
         plot(kind='bar', stacked=True,
-             title="Pivot data of " + name_column.lower()+ " and " + failure_column.lower())
+             title="Pivot data_layer of " + name_column.lower() + " and " + failure_column.lower())
     plt.show()
 
 
 def build_histogram(data, name_column):
     sns.set()
-
     plt.figure("Histogram")
     plt.title("Histogram " + name_column.lower())
     sns.distplot(data[name_column], color='g', bins=100, hist_kws={'alpha': 0.4})
-
     plt.show()
 
 
@@ -96,30 +68,11 @@ def build_boxplot(data, name_column):
     plt.show()
 
 
-def get_colors(count):
-    colors = []
-    cm = plt.cm.get_cmap('hsv', count)
-    for i in np.arange(count):
-        colors.append(cm(i))
-    return colors
-
-
-def dictionary_sort(my_dict):
-    keys = []
-    values = []
-    my_dict = sorted(my_dict.items(), key=lambda x: x[1], reverse=True)
-    for key, value in my_dict:
-        keys.append(key)
-        values.append(value)
-    return keys, values
-
-
 def build_error_diagram(data, failure_column):
     sns.set()
     failure_count = pd.value_counts(data[failure_column].values, sort=True)
     failure_count_keys, failure_count_values = dictionary_sort(dict(failure_count))
     failures = len(failure_count_keys)
-
     plt.figure("Error chart")
     plt.title(failure_column + ' ', fontsize=PLOT_LABEL_FONT_SIZE)
     plt.bar(np.arange(failures), failure_count_values)
@@ -127,4 +80,3 @@ def build_error_diagram(data, failure_column):
     plt.yticks(fontsize=PLOT_LABEL_FONT_SIZE)
     plt.ylabel('Count of failures', fontsize=14)
     plt.show()
-

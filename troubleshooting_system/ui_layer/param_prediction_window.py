@@ -1,8 +1,9 @@
 import tkinter
 from tkinter import messagebox
 
-import troubleshooting_system.windows.result_prediction_window as rpw
-import troubleshooting_system.functions.prediction_data as pd
+import ui_layer.result_prediction_window as rpw
+import data_analyze_layer.prediction_module as pd
+import data_analyze_layer.data_processing_module as dpm
 from tkinter import *
 
 
@@ -49,10 +50,10 @@ class ParamPredictionWindow(tkinter.Toplevel):
         for el in self.lst:
             params.append(el.get())
         try:
-            flag = pd.prediction(pd.read_file(self.file), params, self.fail_col_name, self.algorithm)
+            flag = pd.prediction(dpm.read_file_prediction(self.file), params, self.fail_col_name, self.algorithm)
             if flag is None:
                 raise Exception("Please, enter correct name of column")
-            rpw.ResultPredictionWindow(self, pd.read_file(self.file), params, self.fail_col_name,
+            rpw.ResultPredictionWindow(self, dpm.read_file_prediction(self.file), params, self.fail_col_name,
                                        self.algorithm, self.file)
             self.withdraw()
         except Exception as e:

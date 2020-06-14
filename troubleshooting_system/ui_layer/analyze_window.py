@@ -1,10 +1,10 @@
 import os
 import tkinter
-import troubleshooting_system.functions.analyze_data as ad
+import data_analyze_layer.analyze_module as ad
 from tkinter import *
 from tkinter import messagebox
 from pandastable import Table
-import troubleshooting_system.windows.chart_window as cw
+import data_analyze_layer.build_chart_module as cw
 
 
 class AnalyzeWindow(tkinter.Toplevel):

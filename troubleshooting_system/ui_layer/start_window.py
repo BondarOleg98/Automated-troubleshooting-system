@@ -1,6 +1,6 @@
 import tkinter
-import troubleshooting_system.windows.function_window as fw
-import troubleshooting_system.windows.dataset_window as dw
+import ui_layer.choose_function_window as cfw
+import ui_layer.show_dataset_window as dw
 from tkinter import filedialog, messagebox
 from tkinter import *
 
@@ -8,11 +8,11 @@ from tkinter import *
 class WelcomeWindow(tkinter.Frame):
     def __init__(self, root):
         super().__init__(root)
-        self.icon = tkinter.PhotoImage(file="E:\\Project\\Automated-troubleshooting-system\\"
-                                            "troubleshooting_system\\images\\file_icon.gif")
+        self.icon = tkinter.PhotoImage(file='E:\\Project\\Automated-troubleshooting-system\\'
+                                            'troubleshooting_system\\images_layer\\file_icon.gif')
         self.root = root
         self.init_main()
-        root.protocol("WM_DELETE_WINDOW", self.exit_system)
+        self.root.protocol("WM_DELETE_WINDOW", self.exit_system)
 
     def init_main(self):
         self.menu_window()
@@ -34,9 +34,9 @@ class WelcomeWindow(tkinter.Frame):
             initialfile='tmp',
             filetypes=[("CSV", "*.csv")])
         if file != "":
-            fw.FunctionWindow(self.root, file)
-            dw.DataWindow(self.root, file)
             self.root.withdraw()
+            cfw.FunctionWindow(self.root, file)
+            dw.DataWindow(self.root, file)
 
     def menu_window(self):
         menu = Menu(self.root)

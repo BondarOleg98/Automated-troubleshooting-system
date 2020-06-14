@@ -1,9 +1,9 @@
 import tkinter
 from tkinter import *
 from tkinter import messagebox
-import troubleshooting_system.functions.prediction_data as pd
-
-import troubleshooting_system.windows.param_prediction_window as ppw
+import data_analyze_layer.data_processing_module as dpm
+import data_analyze_layer.validation_module as vm
+import ui_layer.param_prediction_window as ppw
 
 
 class PredictionWindow(tkinter.Toplevel):
@@ -14,18 +14,16 @@ class PredictionWindow(tkinter.Toplevel):
         self.file = file
         self.count_data = StringVar()
         self.fail_col_name = StringVar()
-        self.init_child()
+        self.init_predicted_window()
         self.btn_submit = tkinter.Button(self, text="Submit", command=self.open_param_window, anchor=SW, padx=10,
                                          state=DISABLED)
         self.btn_submit.place(x=230, y=220)
         self.protocol("WM_DELETE_WINDOW", self.exit_window)
 
-    def init_child(self):
+    def init_predicted_window(self):
         self.title("Prediction window")
         self.geometry("300x250+300+200")
         self.resizable(False, False)
-        # self.grab_set()
-        # self.focus_set()
         self.algorithm.set(0)
 
         title_label = Label(self, text="Please enter parameters", font="Arial 15", pady=15, padx=40)
@@ -58,7 +56,7 @@ class PredictionWindow(tkinter.Toplevel):
         if not self.fail_col_name.get().strip():
             messagebox.showerror(title="Error", message="Column must not be empty")
         try:
-            var = pd.read_file(self.file)[self.fail_col_name.get()]
+            var = dpm.read_file_prediction(self.file)[self.fail_col_name.get()]
             integer = int(self.count_data.get())
             if not self.is_int(integer):
                 raise Exception("Count must be an positive integer")
@@ -66,7 +64,7 @@ class PredictionWindow(tkinter.Toplevel):
                 messagebox.showerror(title="Error", message="Count must be less than 7")
             elif not self.fail_col_name.get().strip():
                 messagebox.showerror(title="Error", message="Column must not be empty")
-            flag = pd.check_value_col(pd.read_file(self.file), self.fail_col_name.get())
+            flag = vm.check_value_col(dpm.read_file_prediction(self.file), self.fail_col_name.get())
             if flag is None:
                 raise Exception("Values for Failure column must be 0/1 (No/Yes)")
             ppw.ParamPredictionWindow(self, self.file, self.algorithm.get(), self.count_data.get(),
